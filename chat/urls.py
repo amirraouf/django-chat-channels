@@ -18,6 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('msgs.urls', namespace='msgs')),
-
+    url(r'^', include('users.urls', namespace='users')),
+    url(r'^chat/', include('msgs.urls', namespace='msgs')),
 ]

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'users:log_out' %}">Log out</a>
+    <br>
+    <ul>
+    {% for user in users %}
+      <!-- NOTE: We escape HTML to prevent XSS attacks. -->
+      <li data-username="{{ user.username|escape }}">
+        {{ user.username|escape }}: {{ user.status|default:'Offline' }}
+      </li>
+    {% endfor %}
+    </ul>
+
+    {% endif %}
+{% endblock content %}
+
+{% block script %}
+  <script>
+    var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+    var socket = new WebSocket(ws_scheme + '://' + window.location.host + "/chat" + window.location.pathname);
+
+    socket.onopen = function open() {
+      console.log('WebSockets connection created.');
+    };
+    socket.onmessage = function message(event) {
+      var data = JSON.parse(event.data);
+      // NOTE: We escape JavaScript to prevent XSS attacks.
+       var chat = $("#chat")
+        var ele = $('<tr></tr>')
+
+        ele.append(
+            $("<td></td>").text(data.timestamp)
+        );
+        ele.append(
+            $("<td></td>").text(data.handle)
+        );
+        ele.append(
+            $("<td></td>").text(data.message)
+        );
+
+        chat.append(ele)
+    };
+    $("#chatform").on("submit", function(event) {
+        var message = {
+            handle: $('#handle').val(),
+            message: $('#message').val(),
+        }
+        socket.send(JSON.stringify(message));
+        $("#message").val('').focus();
+        return false;
+    });
+
+    if (socket.readyState == WebSocket.OPEN) {
+      socket.onopen();
+    }
+    socket.onclose = function close(){
+        console.log('connection go out');
+    }
+  </script>
+{% endblock script %}

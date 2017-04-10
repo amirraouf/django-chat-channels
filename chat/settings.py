@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'channels',
     'msgs',
+    'users',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
@@ -129,6 +131,6 @@ CHANNEL_LAYERS = {
         'CONFIG': {
             'hosts': [('localhost', 6379)],
         },
-        'ROUTING': 'msgs.routing.channel_routing',
+        'ROUTING': 'users.routing.channel_routing',
     }
 }
