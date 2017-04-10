@@ -5,21 +5,23 @@
     <a href="{% url 'users:log_out' %}">Log out</a>
     <br>
     <ul>
-    {% for user in users %}
-      <!-- NOTE: We escape HTML to prevent XSS attacks. -->
-      <li data-username="{{ user.username|escape }}">
-        {{ user.username|escape }}: {{ user.status|default:'Offline' }}
-      </li>
-    {% endfor %}
+        {% for msg in msgs %}
+            <li>{{ msg.text }}</li>
+        {% endfor %}
     </ul>
 
     {% endif %}
+    <form method="post" action=".">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input value="Send" type="submit">
+    </form>
 {% endblock content %}
 
 {% block script %}
   <script>
     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-    var socket = new WebSocket(ws_scheme + '://' + window.location.host + "/chat" + window.location.pathname);
+    var socket = new WebSocket(ws_scheme + '://' + window.location.host + window.location.pathname);
 
     socket.onopen = function open() {
       console.log('WebSockets connection created.');

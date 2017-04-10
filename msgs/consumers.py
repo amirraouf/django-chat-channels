@@ -1,11 +1,11 @@
 import json
 from channels import Group
 from channels.sessions import channel_session
-from .models import Room
+from .models import Room, Message
 
 
 @channel_session
-def ws_connect(message):
+def ws_connect_chat(message):
     # Extract the room from the message. This expects message.path to be of the
     # form /chat/{label}/, and finds a Room if the message path is applicable,
     # and if the Room exists. Otherwise, bails (meaning this is a some othersort
@@ -28,7 +28,7 @@ def ws_connect(message):
 
 
 @channel_session
-def ws_receive(message):
+def ws_receive_chat(message):
     # Look up the room from the channel session, bailing if it doesn't exist
     try:
         label = message.channel_session['room']
@@ -56,7 +56,7 @@ def ws_receive(message):
 
 
 @channel_session
-def ws_disconnect(message):
+def ws_disconnect_chat(message):
     try:
         label = message.channel_session['room']
         room = Room.objects.get(label=label)

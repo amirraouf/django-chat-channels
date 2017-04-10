@@ -4,9 +4,9 @@ from users.consumers import ws_connect, ws_disconnect
 from msgs.consumers import ws_connect_chat, ws_disconnect_chat, ws_receive_chat
 
 inner_routes = [
-    route("websocket.connect", ws_connect_chat),
-    route("websocket.receive", ws_receive_chat),
-    route("websocket.disconnect", ws_disconnect_chat),
+    route("websocket.connect_chat", ws_connect_chat),
+    route("websocket.receive_chat", ws_receive_chat),
+    route("websocket.disconnect_chat", ws_disconnect_chat),
 ]
 
 
