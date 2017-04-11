@@ -10,11 +10,13 @@ def ws_connect_chat(message):
     # form /chat/{label}/, and finds a Room if the message path is applicable,
     # and if the Room exists. Otherwise, bails (meaning this is a some othersort
     # of websocket). So, this is effectively a version of _get_object_or_404.
+    import ipdb; ipdb.set_trace()
+
     try:
         prefix, label = message['path'].decode('ascii').strip('/').split('/')
         if prefix != 'chat':
             return
-        room = Room.objects.get(label=label)
+        room = Room.objects.get(from_user=message.user)
     except ValueError:
         return
     except Room.DoesNotExist:
@@ -24,12 +26,14 @@ def ws_connect_chat(message):
 
     Group('chat-' + label, channel_layer=message.channel_layer).add(message.reply_channel)
 
-    message.channel_session['room'] = room.label
+
+    message.channel_session['room'] = room.name
 
 
 @channel_session
 def ws_receive_chat(message):
     # Look up the room from the channel session, bailing if it doesn't exist
+    import ipdb; ipdb.set_trace()
     try:
         label = message.channel_session['room']
         room = Room.objects.get(label=label)
